@@ -1,8 +1,9 @@
 'use server'
 
-export default async function fetchDocumentationByDocId(docid, projectId, token){
+export default async function fetchDocumentationByDocId(docid, projectId, userId, token){
     const inputData = {
-        project_id: projectId
+        project_id: projectId, 
+        userId: userId 
     }
     const response = await fetch(`http://localhost:8000/api/v1/documentation/${docid}/test`, {
         method: 'POST',

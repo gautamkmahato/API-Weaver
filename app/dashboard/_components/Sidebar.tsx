@@ -1,13 +1,21 @@
 'use client'
 
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { RedirectToSignIn, SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation"; // Import usePathname
-import { Home, LayoutDashboard, Code, DollarSign, HelpCircle } from "lucide-react"; // Import icons from lucide-react
+import { Home, LayoutDashboard, Code, HelpCircle, DiamondPercent } from "lucide-react"; // Import icons from lucide-react
 
 export default function Sidebar() {
-  const { user, isLoaded } = useUser();
+  const { isSignedIn, user } = useUser();
   const pathname = usePathname(); // Get the current route
+
+  if (!isSignedIn) { 
+    return(
+      <>
+        <RedirectToSignIn />
+      </>
+    ) 
+  }
 
   return (
     <>
@@ -61,7 +69,7 @@ export default function Sidebar() {
                   pathname === "/dashboard/pricing" ? "bg-red-500 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                 }`}
               >
-                <DollarSign className="h-4 w-4" /> {/* Pricing Icon */}
+                <DiamondPercent className="h-4 w-4" /> {/* Pricing Icon */}
                 <span>Pricing</span>
               </Link>
             </li>

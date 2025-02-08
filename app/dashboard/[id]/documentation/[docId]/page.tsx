@@ -7,6 +7,7 @@ import UploadSchema from '@/app/dashboard/_components/UploadSchema';
 import Test from '@/app/_components/Test';
 import Link from 'next/link';
 import { useAuth, useUser } from '@clerk/nextjs';
+import LoadingSpinner from '@/app/_components/LoadingSpinner';
 
  
 export default function DocumentationPage() {
@@ -49,7 +50,7 @@ export default function DocumentationPage() {
     if(loading){
         return(
             <>
-                <h1>Loading...</h1>
+                <LoadingSpinner />
             </>
         )
     }
@@ -65,15 +66,16 @@ export default function DocumentationPage() {
     }
 
     return (
-        <>
+        <> 
             {errorMessage && <h1>{errorMessage}</h1>}
             {checkDocIdStatus ? <>
-                <div className='bg-neutral-50'>
+                <div className='bg-neutral-50'> 
                     {/* Base */}
                     <div className="flex justify-end mr-12 pt-8">
                         <Link
                             className="inline-block rounded border border-orange-600 bg-buttonBackground px-12 py-3 text-sm font-medium text-white hover:bg-orange-600 hover:text-white focus:outline-none focus:ring active:text-orange-500"
-                            href={`/documentation/${docId}`} target='_blank'
+                            href={`/documentation/${project_id}/${docId}`} target='_blank'
+                            
                         >
                             Open in New Window
                         </Link>
@@ -83,7 +85,7 @@ export default function DocumentationPage() {
 
             </> : 
                 <>
-                    <UploadSchema docId={docId} />
+                    <UploadSchema docId={docId} project_id={project_id} />
                 </>
             }
         </>

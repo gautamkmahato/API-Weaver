@@ -79,10 +79,13 @@ export default function ProjectCard({ title, description, created_at, project_id
         </p>
 
         <Link
-          className="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-gray-600"
+          className="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-buttonBackground hover:text-orange-600 hover:text-[15px]"
           href={`/dashboard/${project_id}`}
         >
           Go to Project
+          <span aria-hidden="true" className="block transition-all group-hover:ms-0.5 rtl:rotate-180">
+            &rarr;
+          </span>
         </Link>
       </article>
     </>

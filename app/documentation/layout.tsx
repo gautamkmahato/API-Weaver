@@ -1,4 +1,3 @@
-import Header from "../_components/Header";
 
 
 export default function Layout({
@@ -9,7 +8,6 @@ export default function Layout({
   return (
     <>
       <div>
-        <Header />
         {children}
       </div>
     </>

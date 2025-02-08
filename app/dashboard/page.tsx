@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import fetchProjects from '../actions/fetchProjects';
 import { useUser } from '@clerk/nextjs';
-import { useAuth } from '@clerk/clerk-react'
+import { RedirectToSignIn, useAuth } from '@clerk/clerk-react'
+import LoadingSpinner from '../_components/LoadingSpinner';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -66,17 +67,19 @@ export default function ProjectsPage() {
   };
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return(
+      <>
+        <LoadingSpinner />
+      </>
+    );
   }
 
   if (!isSignedIn) { 
     return(
       <>
-        <div>
-          <p><span className="text-blue-700 font-semibold"><Link href='/sign-in'>Sign In</Link></span> in to view this page</p>
-        </div>
+        <RedirectToSignIn />
       </>
-    )
+    ) 
   }
 
   return (

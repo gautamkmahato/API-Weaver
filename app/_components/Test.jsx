@@ -8,6 +8,7 @@ import fetchJsonData from '../actions/fetchJsonData';
 import Sandbox from './Sandbox';
 import { useAuth, useUser } from '@clerk/nextjs';
 import { useParams } from 'next/navigation';
+import LoadingSpinnerWithText from './LoadingSpinnerWithText';
 
 export default function Test({ apiData, docId }) {
 
@@ -74,7 +75,7 @@ export default function Test({ apiData, docId }) {
 
   useEffect(() => {
     if (isLoaded && user){
-      async function getJsonData() {
+      async function getJsonData() { 
         // call the fetchJsonData function to check if the docId has jsonData or not
         setLoading(true);
         const token = await getToken(); 
@@ -100,7 +101,7 @@ export default function Test({ apiData, docId }) {
   if(loading){
     return(
         <>
-            <h1>Loading...</h1>
+            <LoadingSpinnerWithText />
         </>
     )
   }

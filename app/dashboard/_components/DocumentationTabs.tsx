@@ -15,6 +15,7 @@ export default function DocumentationTabs({
   input, 
   output, 
   openApiSchema, 
+  apiJson,
   onSave
 }) {
   const [activeTab, setActiveTab] = useState(1);
@@ -24,6 +25,7 @@ export default function DocumentationTabs({
   const [newInput, setNewInput] = useState(JSON.stringify(input, null, 2)); // Convert to string for editing
   const [newOutput, setNewOutput] = useState(JSON.stringify(output, null, 2)); // Convert to string for editing
   const [newOpenApiSchema, setNewOpenApiSchema] = useState(JSON.stringify(openApiSchema, null, 2)); // Convert to string for editing
+  const [newApiJson, setNewApiJson] = useState(JSON.stringify(apiJson, null, 2)); // Convert to string for editing
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
 
@@ -37,8 +39,9 @@ export default function DocumentationTabs({
       const parsedInput = JSON.parse(newInput); // Convert string back to JSON
       const parsedOutput = JSON.parse(newOutput); // Convert string back to JSON
       const parsedOpenApiSchema = JSON.parse(newOpenApiSchema); // Convert string back to JSON
-        console.log(parsedInput, parsedOutput, parsedOpenApiSchema)
-      onSave(newTitle, newDescription, newUrl, parsedInput, parsedOutput, parsedOpenApiSchema);  // Call the save function passed from parent
+      const parsedApiJson = JSON.parse(newApiJson); // Convert string back to JSON
+      console.log(parsedInput, parsedOutput, parsedOpenApiSchema, parsedApiJson)
+      onSave(newTitle, newDescription, newUrl, parsedInput, parsedOutput, parsedOpenApiSchema, parsedApiJson);  // Call the save function passed from parent
       setIsEditing(false);  // Stop editing after saving
     } catch (error) {
       console.error('Invalid JSON format', error);
@@ -215,9 +218,9 @@ export default function DocumentationTabs({
                   <textarea
                       id="newOpenApiSchema"
                       className="w-full px-4 py-2 h-96 border border-gray-300 rounded"
-                      value={newOpenApiSchema}
+                      value={newApiJson}
                       disabled={!isEditing}
-                      onChange={(e) => setNewOpenApiSchema(e.target.value)}
+                      onChange={(e) => setNewApiJson(e.target.value)}
                   />
                   </div>
 

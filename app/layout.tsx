@@ -6,6 +6,7 @@ import {
   ClerkLoading,
   ClerkProvider
 } from '@clerk/nextjs'
+import LoadingSpinner from "./_components/LoadingSpinner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClerkLoading>
-          <div>Clerk is loading</div>
+          <div>
+            <LoadingSpinner />
+          </div>
         </ClerkLoading>
         <ClerkLoaded>
           {children}

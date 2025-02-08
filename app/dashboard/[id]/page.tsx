@@ -10,6 +10,7 @@ import { useAuth, useUser } from '@clerk/nextjs';
 import { ToastContainer, toast } from 'react-toastify'; // Import Toastify components
 import 'react-toastify/dist/ReactToastify.css'; // Import the default styles
 import Link from 'next/link';
+import LoadingSpinner from '@/app/_components/LoadingSpinner';
 
 export default function ApiDocumentation() {
     const [apiDocumentations, setApiDocumentations] = useState([]);
@@ -76,7 +77,9 @@ export default function ApiDocumentation() {
 
     if (loading) {
         return (
-            <h1>Loading...</h1>
+            <>
+                <LoadingSpinner />
+            </>
         );
     }
 

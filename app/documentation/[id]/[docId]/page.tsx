@@ -1,8 +1,10 @@
 'use client'
 
+import LoadingSpinnerWithText from '@/app/_components/LoadingSpinnerWithText';
 import Test from '@/app/_components/Test';
 import fetchJsonData from '@/app/actions/fetchJsonData';
 import { useAuth, useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react'
 
@@ -14,6 +16,7 @@ export default function NewWindowDocumentationPage() {
     const [apiData, setApiData] = useState('');
 
     const params = useParams();
+    const docId = params.docId;
     const project_id = params.id;
     console.log(params);
 
@@ -27,6 +30,7 @@ export default function NewWindowDocumentationPage() {
                 setLoading(true);
                 const token = await getToken();
                 const jsonData = await fetchJsonData(docId, project_id, user?.id, token);
+                console.log(jsonData)
                 if(jsonData[0].openapi_schema){
                     setCheckDocIdStatus(true);
                     setLoading(false);
@@ -40,12 +44,12 @@ export default function NewWindowDocumentationPage() {
             getJsonData();
         }
         
-    }, [getToken, isLoaded, project_id, user]);
+    }, [docId, getToken, isLoaded, project_id, user]);
 
     if(loading){
         return(
             <>
-                <h1>Loading...</h1>
+                <LoadingSpinnerWithText />
             </>
         )
     }

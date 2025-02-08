@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import fetchProjectById from '@/app/actions/fetchProjectById';
 import updateProject from '@/app/actions/updateProject';
 import Link from 'next/link';
+import LoadingSpinner from '@/app/_components/LoadingSpinner';
 
 export default function ProjectUpdatePage() {
   const [projectName, setProjectName] = useState("");
@@ -76,7 +77,11 @@ export default function ProjectUpdatePage() {
 
   // If loading, display a loading indicator
   if (loading) {
-    return <div>Loading...</div>;
+    return(
+      <>
+        <LoadingSpinner />
+      </>
+    )
   }
 
   // Early exit if user is not signed in or project_id is missing

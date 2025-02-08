@@ -8,6 +8,7 @@ import fetchDocumentationByDocId from '@/app/actions/fetchDocumentationByDocId';
 import DocumentationTabs from '@/app/dashboard/_components/DocumentationTabs';
 import updateDocumentation from '@/app/actions/updateDocumentation';
 import Link from 'next/link';
+import LoadingSpinner from '@/app/_components/LoadingSpinner';
 
 export default function DocumentationUpdatePage() {
   const [title, setTitle] = useState("");
@@ -16,6 +17,7 @@ export default function DocumentationUpdatePage() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [openApiSchema, setOpenApiSchema] = useState("");
+  const [apiJson, setApiJson] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);  // To handle loading state
 
@@ -34,12 +36,13 @@ export default function DocumentationUpdatePage() {
       if (isLoaded && user){
         try {
           const token = await getToken(); 
-          const result = await fetchDocumentationByDocId(docId, project_id, token);
+          const result = await fetchDocumentationByDocId(docId, project_id, user?.id, token);
   
-          if (result.length > 0) {
+          if (result.length > 0) {  
             setTitle(result[0].title);
             setDescription(result[0].description);
             setOpenApiSchema(result[0].openapi_schema);
+            setApiJson(result[0].api_Json);
             setUrl(result[0].url);
             setInput(result[0].input);
             setOutput(result[0].output);
@@ -62,9 +65,9 @@ export default function DocumentationUpdatePage() {
   }, [docId, getToken, isLoaded, project_id, user, user?.id]);
 
   // Save function to update project name and description
-  const handleSave = async (newTitle, newDescription, newUrl, newInput, newOutput, newOpenApiSchema) => {
+  const handleSave = async (newTitle, newDescription, newUrl, newInput, newOutput, newOpenApiSchema, newApiJson) => {
     setLoading(true);  // Start loading when saving
-    console.log(newTitle, newDescription, newUrl, newInput, newOutput, newOpenApiSchema);
+    console.log(newTitle, newDescription, newUrl, newInput, newOutput, newOpenApiSchema, newApiJson);
     
     const inputData = {
       user_id: user?.id,
@@ -75,8 +78,8 @@ export default function DocumentationUpdatePage() {
       openapi_schema: newOpenApiSchema,
       url: newUrl,
       input: newInput,
-      output: newOutput
-
+      output: newOutput,
+      api_Json: newApiJson
     };
 
     try {
@@ -90,6 +93,7 @@ export default function DocumentationUpdatePage() {
         setInput(newInput);
         setOutput(newOutput);
         setOpenApiSchema(newOpenApiSchema);
+        setApiJson(newApiJson);
         setErrorMessage('');  // Clear any previous error messages
 
       } else {
@@ -105,7 +109,11 @@ export default function DocumentationUpdatePage() {
 
   // If loading, display a loading indicator
   if (loading) {
-    return <div>Loading...</div>;
+    return(
+      <>
+        <LoadingSpinner />
+      </>
+    )
   }
 
   // Early exit if user is not signed in or project_id is missing
@@ -132,6 +140,7 @@ export default function DocumentationUpdatePage() {
         input={input}
         output={output}
         openApiSchema={openApiSchema}
+        apiJson={apiJson}
         onSave={handleSave}
       />
     </div>

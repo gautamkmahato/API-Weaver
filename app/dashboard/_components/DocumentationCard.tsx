@@ -38,7 +38,7 @@ export default function DocumentationCard({ id, docId, title, description }) {
                         </svg>
                     </button>
 
-                    {/* Dropdown menu */}
+                    {/* Dropdown menu */} 
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
                             <div className="py-1">
@@ -78,7 +78,7 @@ export default function DocumentationCard({ id, docId, title, description }) {
 
                 <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-600">
                     {description}
-                </p>
+                </p> 
 
                 <Link href={`/dashboard/${id}/documentation/${docId}`} className="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-buttonBackground hover:text-orange-600 hover:text-[15px]">
                     Go to Documentation

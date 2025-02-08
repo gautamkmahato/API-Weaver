@@ -19,10 +19,10 @@ const HeroSection = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
-                  href="#documentation"
+                  href="/playground"
                   className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all"
                 >
-                  Get Started
+                  Playground
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5 ml-2"
@@ -37,10 +37,10 @@ const HeroSection = () => {
                   </svg>
                 </a>
                 <a
-                  href="#playground"
+                  href="#guides"
                   className="inline-flex items-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-white hover:bg-neutral-800 transition-all"
                 >
-                  Try Demo
+                  Documentation
                 </a>
               </div>
             </div>

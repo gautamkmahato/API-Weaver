@@ -1,32 +1,24 @@
 'use client';
 
+import SchemaGenerator from '@/app/_components/SchemaGenerator';
 import React, { useState } from 'react';
-import Test from '../../_components/Test';
-import uploadJsonData from '@/app/actions/uploadJsonData';
-import { useAuth, useUser } from '@clerk/nextjs';
-import LoadingSpinner from '@/app/_components/LoadingSpinner';
 
-export default function UploadSchema({ docId, project_id }) {
+export default function ApiDocsGenerator() {
   const [file, setFile] = useState(null);
-  const [inputText, setInputText] = useState(''); 
+  const [inputText, setInputText] = useState('');
   const [fileContent, setFileContent] = useState(null);
   const [apiData, setApiData] = useState(null);
   const [uploadMethod, setUploadMethod] = useState('file');
-  const [apiJson, setApiJson] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const { isSignedIn, user, isLoaded } = useUser(); // Get both user and isLoaded status
-  const { getToken } = useAuth();
 
   const handleFileUpload = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      setLoading(true)
       const text = uploadMethod === 'file' ? await file.text() : inputText;
       const data = JSON.parse(text);
-      // to set raw JSON data to api_Json field in the DB
-      setApiJson(data);
 
       const response = await fetch('http://localhost:8000/convert/test', {
         method: 'POST',
@@ -39,53 +31,29 @@ export default function UploadSchema({ docId, project_id }) {
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.details);
-        setLoading(false);
+        setLoading(false)
         throw new Error(errorData.details || 'Error processing request');
       }
 
       const { ans } = await response.json();
       setFileContent(ans);
-      console.log(ans)
     } catch (error) {
       console.error('Error processing input:', error);
       setFileContent(null);
-      setLoading(false);
     } finally{
-      setLoading(false);
+      setLoading(false)
     }
   };
 
-  const handleInputData = async () => { 
-    const token = await getToken();
-      // upload the openapi json data to postgress DB
-      console.log(fileContent);
-      setLoading(true);
-      const result = await uploadJsonData(fileContent, apiJson, docId, project_id, user?.id, token);
-      console.log(result)
-      if(result){
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          fileContent ? setApiData(fileContent) : alert('Please upload or paste JSON first');
-          setLoading(false);
-        } else{
-          console.log(`Something went wrong in uploading apiData to Database:`);
-          setLoading(false);
-        }
-
+  const handleInputData = () => {
+    fileContent ? setApiData(fileContent) : alert('Please upload or paste JSON first');
   };
-
-  if(loading){
-    return(
-      <>
-        <LoadingSpinner />
-      </>
-    )
-  }
 
 
   return (
     <>
       {error && <h1>{error}</h1>}
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center">
+      <div className=" bg-gray-50 p-6 md:p-20 flex flex-col items-center">
         <div className="w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
           <div className="flex justify-center mb-6">
             <button
@@ -145,10 +113,11 @@ export default function UploadSchema({ docId, project_id }) {
             Convert to Documentation
           </button>
         </div>
-
+      </div>
+      <div>
         {apiData && (
-          <div className="mt-8 w-full">
-            <Test apiData={apiData} docId={docId} />
+          <div className="w-full">
+            {loading ? <>Loading...</> : <SchemaGenerator apiData={apiData} />}
           </div>
         )}
       </div>

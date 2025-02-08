@@ -119,7 +119,7 @@ const Pricing = () =>{
             </div>
 
             {/* FAQ Section */}
-            <div className="max-w-3xl mx-auto mt-28">
+            <div className="max-w-3xl mx-auto mt-28 pb-24">
                 <h3 className="text-4xl font-bold text-white mb-12 text-center">Frequently Asked Questions</h3>
                 <div className="space-y-4">
                     {['How do I get started?', 'What authentication methods are supported?', 'Can I customize the documentation layout?'].map((question, index) => (

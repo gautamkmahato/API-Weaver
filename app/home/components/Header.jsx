@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from 'next/link';
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,13 +16,16 @@ const Header = () => {
       <nav id="navbar" className="fixed w-full z-50 bg-neutral-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
+            {/* Logo and Nav Items */}
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <span className="text-xl font-bold">API Docs</span>
               </div>
             </div>
+
+            {/* Navigation Links */}
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
+              <div className="ml-10 flex items-center space-x-4">
                 <Link
                   href="/"
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -29,22 +33,16 @@ const Header = () => {
                   Home
                 </Link>
                 <Link
-                  href="#documentation"
+                  href="#guides"
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Documentation
                 </Link>
                 <Link
-                  href="/sample"
+                  href="/playground"
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Playground
-                </Link>
-                <Link
-                  href="#guides"
-                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Guides
                 </Link>
                 <Link
                   href="/pricing"
@@ -58,8 +56,27 @@ const Header = () => {
                 >
                   Support
                 </Link>
+                
+                {/* User Button with vertical alignment */}
+                <SignedIn>
+                  <Link href="/dashboard" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                    Dashboard
+                  </Link>
+                  <div className="flex items-center justify-center">
+                    <UserButton className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium" />
+                  </div>
+                </SignedIn>
+
+                {/* SignIn Button for SignedOut */}
+                <SignedOut>
+                  <div className="inline-flex items-center px-8 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all">
+                    <SignInButton />
+                  </div>
+                </SignedOut>
               </div>
             </div>
+
+            {/* Mobile Menu */}
             <div className="md:hidden">
               <button
                 type="button"
@@ -87,56 +104,8 @@ const Header = () => {
             </div>
           </div>
         </div>
-        <div
-          className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}
-          id="mobile-menu"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              href="#hero"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Home
-            </Link>
-            <Link
-              href="#features"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Features
-            </Link>
-            <Link
-              href="#documentation"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Documentation
-            </Link>
-            <Link
-              href="#playground"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Playground
-            </Link>
-            <Link
-              href="#guides"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Guides
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="#support"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Support
-            </Link>
-          </div>
-        </div>
       </nav>
+
     </div>
   );
 };
