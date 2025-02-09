@@ -41,9 +41,9 @@ export default function SchemaGenerator({ apiData }) {
 
   // Available tabs for each method
   const tabs = {
-    GET: ['parameters', 'success-response', 'error-responses', 'http-client'],
-    POST: ['parameters', 'request-body', 'success-response', 'error-responses', 'http-client'],
-    PUT: ['parameters', 'request-body', 'success-response', 'error-responses', 'http-client']
+    GET: ['parameters', 'success-response', 'error-responses', 'API Sandbox'],
+    POST: ['parameters', 'request-body', 'success-response', 'error-responses', 'API Sandbox'],
+    PUT: ['parameters', 'request-body', 'success-response', 'error-responses', 'API Sandbox']
   };
 
   // Event handlers
@@ -323,7 +323,7 @@ export default function SchemaGenerator({ apiData }) {
                       )}
 
                       {/* http client */}
-                      {activeTab === 'http-client' && <Sandbox url={url} activePath={activePath} activeMethod={activeMethod} input={input} />}
+                      {activeTab === 'API Sandbox' && <Sandbox url={url} activePath={activePath} activeMethod={activeMethod} input={input} />}
                     </div>
                   </div>
                 </div>

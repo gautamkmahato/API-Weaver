@@ -1,4 +1,5 @@
-import deleteProject from '@/app/actions/deleteProject';
+'use client'
+
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -11,7 +12,7 @@ export default function ProjectCard({ title, description, created_at, project_id
 
   return (
     <>
-      <article className="rounded-lg border border-gray-100 bg-customColor p-4 shadow-sm transition hover:shadow-lg sm:p-6 dark:border-gray-800 dark:bg-gray-900 dark:shadow-gray-700/25 relative">
+      <article className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-lg sm:p-6 dark:border-gray-800 dark:bg-gray-900 dark:shadow-gray-700/25 relative">
         {/* Three-dot icon */}
         <div className="absolute top-4 right-4">
           <button
@@ -45,7 +46,7 @@ export default function ProjectCard({ title, description, created_at, project_id
                 </Link>
               </div>
             </div>
-          )}
+          )} 
         </div>
 
         {/* Existing content */}
@@ -87,7 +88,9 @@ export default function ProjectCard({ title, description, created_at, project_id
             &rarr;
           </span>
         </Link>
+        
       </article>
+      
     </>
   );
 }

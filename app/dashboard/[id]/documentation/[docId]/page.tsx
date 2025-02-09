@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import UploadSchema from '@/app/dashboard/_components/UploadSchema';
 import Test from '@/app/_components/Test';
 import Link from 'next/link';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { RedirectToSignIn, useAuth, useUser } from '@clerk/nextjs';
 import LoadingSpinner from '@/app/_components/LoadingSpinner';
 
  
@@ -65,6 +65,14 @@ export default function DocumentationPage() {
         )
     }
 
+    if (!isSignedIn) { 
+        return(
+          <>
+            <RedirectToSignIn />
+          </>
+        ) 
+    }
+
     return (
         <> 
             {errorMessage && <h1>{errorMessage}</h1>}
@@ -85,7 +93,7 @@ export default function DocumentationPage() {
 
             </> : 
                 <>
-                    <UploadSchema docId={docId} project_id={project_id} />
+                    <UploadSchema docId={docId} project_id={project_id} /> 
                 </>
             }
         </>

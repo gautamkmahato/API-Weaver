@@ -24,7 +24,7 @@ const Guides = () => {
                 <li>• Basic API calls</li>
                 <li>• Response handling</li>
               </ul>
-              <a href="#" className="inline-block mt-4 text-blue-400 hover:text-blue-300">Read More →</a>
+              <a href="#" className="inline-block mt-4 text-buttonBackground hover:text-orange-700">Read More →</a>
             </div>
           </div>
 
@@ -41,7 +41,7 @@ const Guides = () => {
                 <li>• OAuth 2.0 flow</li>
                 <li>• Token handling</li>
               </ul>
-              <a href="#" className="inline-block mt-4 text-blue-400 hover:text-blue-300">Read More →</a>
+              <a href="#" className="inline-block mt-4 text-buttonBackground hover:text-orange-700">Read More →</a>
             </div>
           </div>
 
@@ -58,7 +58,7 @@ const Guides = () => {
                 <li>• Rate limiting</li>
                 <li>• Performance tips</li>
               </ul>
-              <a href="#" className="inline-block mt-4 text-blue-400 hover:text-blue-300">Read More →</a>
+              <a href="#" className="inline-block mt-4 text-buttonBackground hover:text-orange-700">Read More →</a>
             </div>
           </div>
         </div>

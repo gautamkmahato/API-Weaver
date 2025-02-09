@@ -50,9 +50,9 @@ const Pricing = () =>{
               </div>
     
               {/* Pro Tier */}
-              <div className="bg-white border border-blue-500 rounded-2xl shadow-lg relative animate__animated animate__fadeInUp" style={{ animationDelay: '0.2s' }}>
+              <div className="bg-white border-2 border-buttonBackground rounded-2xl shadow-lg relative animate__animated animate__fadeInUp" style={{ animationDelay: '0.2s' }}>
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-blue-500 text-neutral-50 px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
+                  <span className="bg-buttonBackground text-neutral-50 px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
                 </div>
                 <div className="p-8">
                   <h3 className="text-xl font-semibold text-neutral-800 mb-2">Pro</h3>
@@ -79,7 +79,7 @@ const Pricing = () =>{
                       API playground access
                     </li>
                   </ul>
-                  <button className="w-full py-3 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                  <button className="w-full py-3 px-6 bg-buttonBackground text-white rounded-lg hover:bg-orange-700 transition-colors">
                     Start Free Trial
                   </button>
                 </div>

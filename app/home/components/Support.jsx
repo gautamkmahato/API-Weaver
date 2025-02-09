@@ -23,7 +23,7 @@ const Support = () => {
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Documentation</h3>
             <p className="text-gray-400 mb-4">Comprehensive guides and API references</p>
-            <a href="#documentation" className="text-blue-400 hover:text-blue-300 inline-flex items-center">
+            <a href="#documentation" className="text-buttonBackground hover:text-orange-700 inline-flex items-center">
               Browse Docs
               <ChevronDown className="w-4 h-4 ml-2" />
             </a>
@@ -38,7 +38,7 @@ const Support = () => {
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Community Forum</h3>
             <p className="text-gray-400 mb-4">Connect with other developers</p>
-            <a href="#" className="text-blue-400 hover:text-blue-300 inline-flex items-center">
+            <a href="#" className="text-buttonBackground hover:text-orange-700 inline-flex items-center">
               Join Discussion
               <ChevronDown className="w-4 h-4 ml-2" />
             </a>
@@ -53,7 +53,7 @@ const Support = () => {
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Direct Support</h3>
             <p className="text-gray-400 mb-4">Get help from our support team</p>
-            <a href="#" className="text-blue-400 hover:text-blue-300 inline-flex items-center">
+            <a href="#" className="text-buttonBackground hover:text-orange-700 inline-flex items-center">
               Contact Support
               <ChevronDown className="w-4 h-4 ml-2" />
             </a>

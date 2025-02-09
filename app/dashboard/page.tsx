@@ -3,7 +3,6 @@
 import ProjectCard from './_components/ProjectCard';
 import ModalBox from '../_components/ModalBox';
 import Form from './_components/ProjectForm';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import fetchProjects from '../actions/fetchProjects';
 import { useUser } from '@clerk/nextjs';

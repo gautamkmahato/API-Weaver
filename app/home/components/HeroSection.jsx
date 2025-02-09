@@ -7,11 +7,11 @@ const HeroSection = () => {
         id="hero"
         className="bg-neutral-900 text-white min-h-[70vh] flex items-center"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="max-w-7xl mx-auto mt-16 px-4 sm:px-6 lg:px-8 py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate__animated animate__fadeInLeft">
               <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                Explore APIs with <span className="text-blue-500">Clarity</span>
+                Explore APIs with <span className="text-buttonBackground">Clarity</span>
               </h1>
               <p className="text-xl text-gray-300">
                 Modern, intuitive documentation viewer that makes API
@@ -20,7 +20,7 @@ const HeroSection = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href="/playground"
-                  className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all"
+                  className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-buttonBackground hover:bg-orange-700 transition-all"
                 >
                   Playground
                   <svg

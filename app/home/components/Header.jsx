@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from 'next/link';
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import Image from "next/image";
+import logo from '../../../public/assets/logo-3.png';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +21,9 @@ const Header = () => {
             {/* Logo and Nav Items */}
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <span className="text-xl font-bold">API Docs</span>
+                <span className="text-xl font-bold">
+                  <Image src={logo} alt="logo" width="96" height="96" />
+                </span>
               </div>
             </div>
 

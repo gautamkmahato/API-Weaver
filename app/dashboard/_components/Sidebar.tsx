@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { RedirectToSignIn, SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation"; // Import usePathname
-import { Home, LayoutDashboard, Code, HelpCircle, DiamondPercent } from "lucide-react"; // Import icons from lucide-react
+import { Home, LayoutDashboard, Code, HelpCircle, DiamondPercent, Dock } from "lucide-react"; // Import icons from lucide-react
+import logo from '../../../public/assets/logo-3.png';
+import Image from "next/image";
+
 
 export default function Sidebar() {
   const { isSignedIn, user } = useUser();
@@ -21,28 +24,20 @@ export default function Sidebar() {
     <>
       <div className="flex h-screen w-64 flex-col justify-between border-e bg-white">
         <div className="px-4 py-6">
-          <span className="grid h-10 w-32 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">
-            Logo
-          </span>
+          <Link href="/">
+            <span className="grid place-content-start rounded-lg text-xs text-gray-600">
+              <Image src={logo} alt="logo" width="96" height="96" />
+            </span>
+          </Link>
+          
 
           <ul className="mt-6 space-y-1">
-            <li>
-              <Link
-                href="/"
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
-                  pathname === "/" ? "bg-red-500 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                }`}
-              >
-                <Home className="h-4 w-4" /> {/* Home Icon */}
-                <span>Home</span>
-              </Link>
-            </li>
 
             <li>
               <Link
                 href="/dashboard"
                 className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
-                  pathname === "/dashboard" ? "bg-red-500 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  pathname === "/dashboard" ? "bg-iconBackground text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                 }`}
               >
                 <LayoutDashboard className="h-4 w-4" /> {/* Dashboard Icon */}
@@ -54,7 +49,7 @@ export default function Sidebar() {
               <Link
                 href="/dashboard/playground"
                 className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
-                  pathname === "/dashboard/playground" ? "bg-red-500 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  pathname === "/dashboard/playground" ? "bg-iconBackground text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                 }`}
               >
                 <Code className="h-4 w-4" /> {/* Playground Icon */}
@@ -64,9 +59,21 @@ export default function Sidebar() {
 
             <li>
               <Link
+                href="/"
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
+                  pathname === "/documentation" ? "bg-iconBackground text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                }`}
+              >
+                <Dock className="h-4 w-4" /> {/* Dashboard Icon */}
+                <span>Documentation</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
                 href="/dashboard/pricing"
                 className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
-                  pathname === "/dashboard/pricing" ? "bg-red-500 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  pathname === "/dashboard/pricing" ? "bg-iconBackground text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                 }`}
               >
                 <DiamondPercent className="h-4 w-4" /> {/* Pricing Icon */}
@@ -78,7 +85,7 @@ export default function Sidebar() {
               <Link
                 href="/dashboard/support"
                 className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium ${
-                  pathname === "/dashboard/support" ? "bg-red-500 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  pathname === "/dashboard/support" ? "bg-iconBackground text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                 }`}
               >
                 <HelpCircle className="h-4 w-4" /> {/* Support Icon */}
