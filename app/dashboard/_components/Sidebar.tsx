@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { RedirectToSignIn, SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation"; // Import usePathname
-import { Home, LayoutDashboard, Code, HelpCircle, DiamondPercent, Dock } from "lucide-react"; // Import icons from lucide-react
-import logo from '../../../public/assets/logo-3.png';
+import { LayoutDashboard, Code, HelpCircle, DiamondPercent, Dock } from "lucide-react"; // Import icons from lucide-react
+import logo from '../../../public/assets/logo-4.png';
 import Image from "next/image";
 
 
@@ -26,7 +26,7 @@ export default function Sidebar() {
         <div className="px-4 py-6">
           <Link href="/">
             <span className="grid place-content-start rounded-lg text-xs text-gray-600">
-              <Image src={logo} alt="logo" width="96" height="96" />
+              <Image src={logo} alt="logo" width="120" height="120" />
             </span>
           </Link>
           

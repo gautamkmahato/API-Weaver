@@ -6,6 +6,8 @@ import uploadJsonData from '@/app/actions/uploadJsonData';
 import { RedirectToSignIn, useAuth, useUser } from '@clerk/nextjs';
 import LoadingSpinner from '@/app/_components/LoadingSpinner';
 import { Upload, FileText, ArrowUpCircle, FileJson } from 'lucide-react';
+import SwaggerParser from '@apidevtools/swagger-parser';
+import yaml from 'js-yaml';
 
 export default function UploadSchema({ docId, project_id }) {
   const [file, setFile] = useState(null);
@@ -17,23 +19,102 @@ export default function UploadSchema({ docId, project_id }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn, user } = useUser();
   const { getToken } = useAuth();
+
+  const convertToJson = (input) => {
+    try {
+      // First try to parse as JSON
+      JSON.parse(input);
+      return input; // If successful, return as is
+    } catch (e) {
+      try {
+        // If JSON parsing fails, try to parse as YAML
+        const jsonData = yaml.load(input);
+        return JSON.stringify(jsonData);
+      } catch (yamlError) {
+        throw new Error('Invalid format. Please provide valid JSON or YAML.');
+      }
+    }
+  };
+
+  const validateOpenAPISchema = async (jsonData) => {
+    try {
+      // Check if the OpenAPI version is supported
+      const version = jsonData.openapi;
+      if (!version) {
+        throw new Error('OpenAPI version not found in schema');
+      }
+
+      // Check for supported versions (3.0.x or 3.1.x)
+      if (!version.startsWith('3.0') && !version.startsWith('3.1')) {
+        throw new Error('Unsupported OpenAPI version. Only versions 3.0.x and 3.1.x are supported.');
+      }
+
+      // For 3.0.x versions, use Swagger Parser validation
+      if (version.startsWith('3.0')) {
+        await SwaggerParser.validate(jsonData);
+      } else {
+        // For 3.1.x versions, perform basic structure validation
+        if (!jsonData.info || !jsonData.paths) {
+          throw new Error('Invalid OpenAPI 3.1 schema: Missing required fields (info or paths)');
+        }
+
+        if (!jsonData.info.title || !jsonData.info.version) {
+          throw new Error('Invalid OpenAPI 3.1 schema: Missing required fields in info object');
+        }
+
+        if (typeof jsonData.paths !== 'object') {
+          throw new Error('Invalid OpenAPI 3.1 schema: Paths must be an object');
+        }
+      }
+      
+      return true;
+    } catch (err) {
+      throw new Error(`OpenAPI schema validation failed: ${err.message}`);
+    }
+  };
+
+  const validateInput = async (text) => {
+    try {
+      // Step 1: Convert YAML to JSON if needed
+      const jsonString = convertToJson(text);
+      
+      // Step 2: Parse JSON
+      const jsonData = JSON.parse(jsonString);
+
+      // Step 3: Validate OpenAPI Schema
+      await validateOpenAPISchema(jsonData);
+      
+      return jsonData;
+    } catch (error) {
+      setError(error.message);
+      return null;
+    }
+  };
 
   const handleFileUpload = async (e) => {
     e.preventDefault();
+    setError('');
     try {
       setLoading(true);
       const text = uploadMethod === 'file' ? await file.text() : inputText;
-      const data = JSON.parse(text);
-      setApiJson(data);
+      
+      // Validate and convert input
+      const validatedData = await validateInput(text);
+      if (!validatedData) {
+        setLoading(false);
+        return;
+      }
+
+      setApiJson(validatedData);
 
       const response = await fetch('http://localhost:8000/convert/test', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(validatedData)
       });
 
       if (!response.ok) {
@@ -123,8 +204,8 @@ export default function UploadSchema({ docId, project_id }) {
               <div className="border-2 border-dashed rounded-lg p-8 text-center" style={{ borderColor: '#B6A28E' }}>
                 <input
                   type="file"
-                  accept=".json"
-                  onChange={(e) => setFile(e.target.files[0])}
+                  accept=".json,.yaml,.yml"
+                  onChange={(e) => setFile(e.target.files[0])} 
                   className="hidden"
                   id="file-upload"
                 />
@@ -187,5 +268,6 @@ export default function UploadSchema({ docId, project_id }) {
         </div>
       )}
     </div>
-  );
+  )
+  
 }

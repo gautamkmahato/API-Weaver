@@ -4,7 +4,6 @@ import SchemaGenerator from '@/app/_components/SchemaGenerator';
 import React, { useState } from 'react';
 import { Upload, FileText, ArrowUpCircle, FileJson, RefreshCcw } from 'lucide-react';
 import SwaggerParser from '@apidevtools/swagger-parser';
-import yaml from 'js-yaml';
 
 export default function ApiDocsGenerator() {
   const [file, setFile] = useState(null);
@@ -15,73 +14,30 @@ export default function ApiDocsGenerator() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const convertToJson = (input) => {
-    try {
-      // First try to parse as JSON
-      JSON.parse(input);
-      return input; // If successful, return as is
-    } catch (e) {
-      try {
-        // If JSON parsing fails, try to parse as YAML
-        const jsonData = yaml.load(input);
-        return JSON.stringify(jsonData);
-      } catch (yamlError) {
-        throw new Error('Invalid format. Please provide valid JSON or YAML.');
-      }
-    }
-  };
-
   const validateOpenAPISchema = async (jsonData) => {
     try {
-      // First check if the OpenAPI version is supported
-      const version = jsonData.openapi;
-      if (!version) {
-        throw new Error('OpenAPI version not found in schema');
-      }
-
-      // Check for supported versions (3.0.x or 3.1.x)
-      if (!version.startsWith('3.0') && !version.startsWith('3.1')) {
-        throw new Error('Unsupported OpenAPI version. Only versions 3.0.x and 3.1.x are supported.');
-      }
-
-      // For 3.0.x versions, use Swagger Parser validation
-      if (version.startsWith('3.0')) {
-        await SwaggerParser.validate(jsonData);
-      } else {
-        // For 3.1.x versions, perform basic structure validation
-        // Check for required OpenAPI 3.1 fields
-        if (!jsonData.info || !jsonData.paths) {
-          throw new Error('Invalid OpenAPI 3.1 schema: Missing required fields (info or paths)');
-        }
-
-        // Validate info object
-        if (!jsonData.info.title || !jsonData.info.version) {
-          throw new Error('Invalid OpenAPI 3.1 schema: Missing required fields in info object (title or version)');
-        }
-
-        // Validate paths object
-        if (typeof jsonData.paths !== 'object') {
-          throw new Error('Invalid OpenAPI 3.1 schema: Paths must be an object');
-        }
+      await SwaggerParser.validate(jsonData);
+      
+      if (!jsonData.openapi?.startsWith('3.0')) {
+        throw new Error('Invalid OpenAPI version. Only OpenAPI 3.0.x is supported.');
       }
       
       return true;
     } catch (err) {
-      throw new Error(`OpenAPI schema validation failed: ${err.message}`);
+      throw new Error(`Invalid OpenAPI 3.0 schema: ${err.message}`);
     }
   };
 
   const validateInput = async (text) => {
     try {
-      // Step 1: Convert YAML to JSON if needed
-      const jsonString = convertToJson(text);
-      
-      // Step 2: Parse JSON
-      const jsonData = JSON.parse(jsonString);
+      let jsonData;
+      try {
+        jsonData = JSON.parse(text);
+      } catch (err) {
+        throw new Error('Invalid JSON format. Please check your input.');
+      }
 
-      // Step 3: Validate OpenAPI Schema
       await validateOpenAPISchema(jsonData);
-      
       return jsonData;
     } catch (error) {
       setError(error.message);
@@ -92,12 +48,10 @@ export default function ApiDocsGenerator() {
   const handleFileUpload = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
-
     try {
+      setLoading(true);
       const text = uploadMethod === 'file' ? await file.text() : inputText;
-
-      // Validate input before sending to backend
+      
       const validatedData = await validateInput(text);
       if (!validatedData) {
         setLoading(false);
@@ -137,29 +91,24 @@ export default function ApiDocsGenerator() {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto py-12 px-4">
-        {error && (
-          <div className="max-w-2xl mx-auto mb-8 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-md">
-            <p className="flex items-center">
-              <span className="font-semibold">Error:</span>
-              <span className="ml-2">{error}</span>
-            </p>
-          </div>
-        )}
+    <div className="min-h-screen mt-12">
+      {error && (
+        <div className="max-w-2xl mx-auto p-4 fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-lg">
+          <p className="flex items-center font-medium">{error}</p>
+        </div>
+      )}
 
-        {/* Rest of your existing JSX remains the same */}
-        <div className="max-w-2xl mx-auto mt-12 rounded-xl shadow-2xl overflow-hidden" style={{ backgroundColor: '#F5F5DC' }}>
+      <div className="container mx-auto py-8">
+        <div className="max-w-xl mx-auto rounded-2xl shadow-2xl overflow-hidden" style={{ backgroundColor: '#F5F5DC' }}>
           <div className="p-8">
             <h1 className="text-2xl font-bold text-center mb-8">API Documentation Generator</h1>
-
-            <div className="flex justify-center space-x-4 mb-8">
+            
+            <div className="flex justify-center gap-4 mb-8">
               <button
                 onClick={() => setUploadMethod('file')}
-                className={`flex items-center px-6 py-3 rounded-lg transition-all duration-200 ${uploadMethod === 'file'
-                    ? 'text-white shadow-md'
-                    : 'text-gray-700 bg-opacity-60'
-                  }`}
+                className={`flex items-center px-6 py-3 rounded-lg transition-colors duration-200 ${
+                  uploadMethod === 'file' ? 'text-white' : 'text-gray-700'
+                }`}
                 style={{ backgroundColor: uploadMethod === 'file' ? '#B6A28E' : '#F5F5DC' }}
               >
                 <Upload className="mr-2 h-5 w-5" />
@@ -167,10 +116,9 @@ export default function ApiDocsGenerator() {
               </button>
               <button
                 onClick={() => setUploadMethod('text')}
-                className={`flex items-center px-6 py-3 rounded-lg transition-all duration-200 ${uploadMethod === 'text'
-                    ? 'text-white shadow-md'
-                    : 'text-gray-700 bg-opacity-60'
-                  }`}
+                className={`flex items-center px-6 py-3 rounded-lg transition-colors duration-200 ${
+                  uploadMethod === 'text' ? 'text-white' : 'text-gray-700'
+                }`}
                 style={{ backgroundColor: uploadMethod === 'text' ? '#B6A28E' : '#F5F5DC' }}
               >
                 <FileText className="mr-2 h-5 w-5" />
@@ -180,23 +128,21 @@ export default function ApiDocsGenerator() {
 
             {uploadMethod === 'file' ? (
               <form onSubmit={handleFileUpload} className="space-y-6">
-                <div
-                  className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-opacity-70 transition-all duration-200"
-                  style={{ borderColor: '#B6A28E' }}
-                >
+                <div className="border-3 border-dashed rounded-xl p-10 text-center transition-all duration-200 hover:opacity-80"
+                     style={{ borderColor: '#B6A28E', backgroundColor: 'rgba(182, 162, 142, 0.1)' }}>
                   <input
                     type="file"
-                    accept=".json,.yaml,.yml"
+                    accept=".json"
                     onChange={(e) => setFile(e.target.files[0])}
                     className="hidden"
                     id="file-upload"
                   />
                   <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
                     <FileJson className="h-16 w-16 mb-4" style={{ color: '#B6A28E' }} />
-                    <span className="text-sm mb-2">Drag and drop your JSON file here</span>
-                    <span className="text-xs opacity-60">or click to browse</span>
+                    <p className="text-lg mb-2">Drop your JSON file here</p>
+                    <p className="text-sm opacity-60">or click to browse</p>
                     {file && (
-                      <div className="mt-4 p-2 rounded-lg text-sm" style={{ backgroundColor: '#B6A28E', color: '#F5F5DC' }}>
+                      <div className="mt-4 px-4 py-2 rounded-lg text-white" style={{ backgroundColor: '#B6A28E' }}>
                         {file.name}
                       </div>
                     )}
@@ -205,11 +151,11 @@ export default function ApiDocsGenerator() {
                 <button
                   type="submit"
                   disabled={!file}
-                  className="w-full py-3 rounded-lg text-white flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+                  className="w-full py-4 rounded-lg text-white flex items-center justify-center transition-opacity duration-200 disabled:opacity-50"
                   style={{ backgroundColor: '#E07B39' }}
                 >
                   <ArrowUpCircle className="mr-2 h-5 w-5" />
-                  Upload and Process
+                  Process File
                 </button>
               </form>
             ) : (
@@ -219,13 +165,13 @@ export default function ApiDocsGenerator() {
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Paste your JSON here..."
                   rows={8}
-                  className="w-full p-4 rounded-lg border focus:ring-2 focus:ring-opacity-50 resize-none"
+                  className="w-full p-4 rounded-lg border focus:ring-2 focus:ring-opacity-50"
                   style={{ backgroundColor: 'white', borderColor: '#B6A28E' }}
                 />
                 <button
                   onClick={handleFileUpload}
                   disabled={!inputText}
-                  className="w-full py-3 rounded-lg text-white flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+                  className="w-full py-4 rounded-lg text-white flex items-center justify-center transition-opacity duration-200 disabled:opacity-50"
                   style={{ backgroundColor: '#E07B39' }}
                 >
                   <ArrowUpCircle className="mr-2 h-5 w-5" />
@@ -237,7 +183,7 @@ export default function ApiDocsGenerator() {
             <button
               onClick={handleInputData}
               disabled={!fileContent}
-              className="w-full mt-6 py-3 rounded-lg text-white flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+              className="w-full mt-6 py-4 rounded-lg text-white flex items-center justify-center transition-opacity duration-200 disabled:opacity-50"
               style={{ backgroundColor: '#E07B39' }}
             >
               <RefreshCcw className="mr-2 h-5 w-5" />
@@ -247,16 +193,17 @@ export default function ApiDocsGenerator() {
         </div>
 
         {apiData && (
-          <div className="mt-12 w-full mx-auto rounded-xl shadow-xl overflow-hidden" style={{ backgroundColor: '#F5F5DC' }}>
-            <div className="p-8">
-              {loading ? (
-                <div className="flex items-center justify-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: '#E07B39' }}></div>
-                </div>
-              ) : (
+          <div className="mt-8 max-w-6xl mx-auto">
+            {loading ? (
+              <div className="flex justify-center items-center p-8 rounded-xl" style={{ backgroundColor: '#F5F5DC' }}>
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent" 
+                     style={{ borderColor: '#E07B39', borderTopColor: 'transparent' }} />
+              </div>
+            ) : (
+              <div className="p-8 rounded-xl" style={{ backgroundColor: '#F5F5DC' }}>
                 <SchemaGenerator apiData={apiData} />
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -55,7 +55,8 @@ export default function Test({ apiData, docId }) {
   const tabs = {
     GET: ['parameters', 'success-response', 'error-responses', 'API Sandbox'],
     POST: ['parameters', 'request-body', 'success-response', 'error-responses', 'API Sandbox'],
-    PUT: ['parameters', 'request-body', 'success-response', 'error-responses', 'API Sandbox']
+    PUT: ['parameters', 'request-body', 'success-response', 'error-responses', 'API Sandbox'],
+    DELETE: ['parameters', 'request-body', 'success-response', 'error-responses', 'API Sandbox']
   };
 
   // Event handlers
