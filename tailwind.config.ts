@@ -14,7 +14,7 @@ export default {
         bgCustomColor:  "#B6A28E",
         customColor: "#F5F5DC",
         iconBackground: "#B6A28E",
-        buttonBackground: "#E07B39"
+        buttonBackground: "#E07B39" 
       },
       animation: {
         border: 'background ease infinite',
